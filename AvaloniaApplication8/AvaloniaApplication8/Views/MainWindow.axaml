@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:AvaloniaApplication8.ViewModels"
+        xmlns:models="using:AvaloniaApplication8.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AvaloniaApplication8.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Лог-менеджер"
+        x:DataType="vm:MainWindowViewModel">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Margin="10" ColumnDefinitions="*,*">
+     
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10">
+            <ComboBox ItemsSource="{Binding MessageTypes}" 
+                      SelectedItem="{Binding SelectedMessageType}" 
+                      Width="120"
+                      x:DataType="vm:MainWindowViewModel"/>
+            <TextBox Text="{Binding NewMessageText}" 
+                     Watermark="Текст сообщения" 
+                     Width="300"/>
+            <Button Content="Добавить" 
+                    Command="{Binding AddMessage}"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="Фильтр по типу:" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding MessageTypes}" 
+                      SelectedItem="{Binding FilterType}" 
+                      Width="120"
+                      x:DataType="vm:MainWindowViewModel"/>
+        </StackPanel>
+        
+        
+        <TextBlock Grid.Row="3" Grid.Column="0" 
+                   Text="{Binding MessageCount, StringFormat='Всего сообщений: {0}'}"/>
+
+
+        <ListBox Grid.Row="4" Grid.ColumnSpan="2" 
+                ItemsSource="{Binding FilteredMessages}" 
+                Margin="0,10">
+            <ListBox.DataTemplates>
+                <DataTemplate DataType="models:LogMessage" x:DataType="models:LogMessage">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="{Binding Type}" 
+                                  FontWeight="Bold" 
+                                  Width="100"/>
+                        <TextBlock Text="{Binding DateTime, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" 
+                                  Width="150"/>
+                        <TextBlock Text="{Binding Text}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.DataTemplates>
+        </ListBox>
+        
+    </Grid>
+</Window>
